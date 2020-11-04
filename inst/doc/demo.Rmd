@@ -1,0 +1,162 @@
+---
+title: "demo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(knitr)
+library(mhcnuggetsr)
+library(testthat)
+```
+
+For this vignette, we use the same example as the MHCnuggets
+Python notebooks.
+
+Get the path to the testing peptides, and show them:
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  peptides_path <- get_example_filename("test_peptides.peps")
+  expect_true(file.exists(peptides_path))
+  readLines(peptides_path, warn = FALSE)
+}
+```
+
+Pick an MHC-I haplotype:
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  mhc_1_haplotype <- "HLA-A02:01"
+  expect_true(mhc_1_haplotype %in% get_trained_mhc_1_haplotypes())
+}
+```
+
+Predict:
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  mhcnuggets_options <- create_mhcnuggets_options(
+    mhc = mhc_1_haplotype
+  )
+  df <- predict_ic50_from_file(
+    peptides_path = peptides_path,
+    mhcnuggets_options = mhcnuggets_options
+  )
+  kable(df)
+}
+```
+
+Predict:
+
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  mhcnuggets_options <- create_mhcnuggets_options(
+    mhc = mhc_1_haplotype,
+    ba_models = TRUE
+  )
+  df <- predict_ic50_from_file(
+    peptides_path = peptides_path,
+    mhcnuggets_options = mhcnuggets_options
+  )
+  kable(df)
+}
+```
+
+Use MCH-II haplotype:
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  mhc_2_haplotype <- "HLA-DRB101:01"
+  expect_true(mhc_2_haplotype %in% get_trained_mhc_2_haplotypes())
+}
+```
+
+Predict:
+
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  mhcnuggets_options <- create_mhcnuggets_options(
+    mhc = mhc_2_haplotype
+  )
+  df <- predict_ic50_from_file(
+    peptides_path = peptides_path,
+    mhcnuggets_options = mhcnuggets_options
+  )
+  kable(df)
+}
+```
+
+Use another MHC-I haplotype. In this case, MHCnuggets has not been
+trained upon it, but it is a valid supertype:
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  mhc_1_haplotype <- "HLA-A02:60"
+  expect_false(mhc_1_haplotype %in% get_trained_mhc_1_haplotypes())
+}
+```
+
+Predict:
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  mhcnuggets_options <- create_mhcnuggets_options(
+    mhc_class = "I",
+    mhc = mhc_1_haplotype
+  )
+  df <- predict_ic50_from_file(
+    peptides_path = peptides_path,
+    mhcnuggets_options = mhcnuggets_options
+  )
+  kable(df)
+}
+```
+
+## Appendix
+
+### All example files
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  basename(get_example_filenames())
+}
+```
+
+### All MHC-I haplotypes
+
+These are the MHC-I haplotypes that have a trained model.
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  cat(get_trained_mhc_1_haplotypes())
+}
+```
+
+### All MHC-II haplotypes
+
+These are the MHC-II haplotypes that have a trained model.
+
+```{r}
+if (is_mhcnuggets_installed()) {
+  cat(get_trained_mhc_2_haplotypes())
+}
+```
+
+### Session info
+
+```{r}
+mhcnuggetsr_report()
+```
