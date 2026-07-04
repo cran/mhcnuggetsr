@@ -8,19 +8,40 @@
 #' @author Richèl J.C. Bilderbeek
 #' @export
 get_trained_mhc_2_haplotypes <- function(
-  folder_name = get_default_mhcnuggets_folder(),
-  mhcnuggets_url = get_mhcnuggets_url()
+  mhcnuggetsr_folder = get_default_mhcnuggets_folder(),
+  ormr_folder_name = get_default_orm_folder_name()
 ) {
   mhcnuggetsr::check_mhcnuggets_installation(
-    folder_name = folder_name,
-    mhcnuggets_url = mhcnuggets_url
+    mhcnuggetsr_folder = mhcnuggetsr_folder,
+    ormr_folder_name = ormr_folder_name
   )
-  mhcnuggets_folder <- file.path(folder_name, basename(mhcnuggets_url))
+  mhcnuggets_folder <- file.path(
+    mhcnuggetsr_folder,
+    basename(mhcnuggetsr::get_mhcnuggets_url())
+  )
   testthat::expect_true(dir.exists(mhcnuggets_folder))
-  alleles_filename <- file.path(
-    mhcnuggets_folder, "mhcnuggets",
-    "data", "production", "mhcII", "alleles_with_trained_models.txt"
+  alleles_filename_1 <- normalizePath(
+    file.path(
+      mhcnuggets_folder,
+      "data", "production", "mhcII", "alleles_with_trained_models.txt"
+    ), mustWork = FALSE
   )
-  testthat::expect_true(file.exists(alleles_filename))
-  readLines(alleles_filename)
+  alleles_filename_2 <- normalizePath(
+    file.path(
+      mhcnuggets_folder,
+      "mhcnuggets",
+      "data", "production", "mhcII", "alleles_with_trained_models.txt"
+    ), mustWork = FALSE
+  )
+  if (file.exists(alleles_filename_1)) {
+    return(readLines(alleles_filename_1))
+  }
+  if (file.exists(alleles_filename_2)) {
+    return(readLines(alleles_filename_2))
+  }
+  stop(
+    "Could not find a file at neither ",
+    alleles_filename_1, " nor ",
+    alleles_filename_2
+  )
 }

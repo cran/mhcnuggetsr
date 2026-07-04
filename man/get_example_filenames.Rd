@@ -5,16 +5,19 @@
 \title{Get the full path to all MHCnuggets example files}
 \usage{
 get_example_filenames(
-  folder_name = get_default_mhcnuggets_folder(),
-  mhcnuggets_url = get_mhcnuggets_url()
+  mhcnuggetsr_folder = get_default_mhcnuggetsr_folder(),
+  ormr_folder_name = get_default_orm_folder_name()
 )
 }
 \arguments{
-\item{folder_name}{superfolder of MHCnuggets.
-The name of the superfolder is \code{/home/[user_name]/.local/share}
-by default, as can be obtained by\link{get_default_mhcnuggets_folder}}
+\item{mhcnuggetsr_folder}{folder where \code{mhcnuggetsr} stores its
+temporary files. Use \link{get_default_mhcnuggetsr_folder}
+for its default value.}
 
-\item{mhcnuggets_url}{URL to the MHCnuggets GitHub repository}
+\item{ormr_folder_name}{folder used by the \code{ormr} package
+to install Python packages to.
+Use \code{python3} to install Python packages via \code{pip}.
+Default value is \code{python3}}
 }
 \value{
 a character vector with all MHCnuggets example files

@@ -31,7 +31,11 @@
 predict_ic50 <- function(
   mhcnuggets_options,
   peptides,
-  peptides_path = create_temp_peptides_path()
+  peptides_path = create_temp_peptides_path(),
+  mhcnuggets_output_filename = mhcnuggetsr::create_temp_peptides_path(
+    fileext = ".csv"
+  ),
+  verbose = FALSE
 ) {
   if (any(nchar(peptides) > 15)) {
     stop(
@@ -39,11 +43,24 @@ predict_ic50 <- function(
       "Tip: use 'predict_ic50s' to get the IC50s for longer peptides"
     )
   }
-  writeLines(text = peptides, con = peptides_path)
+  normalized_peptides_path <- normalizePath(peptides_path, mustWork = FALSE)
+  dir.create(
+    path = dirname(normalized_peptides_path),
+    showWarnings = FALSE,
+    recursive = TRUE
+  )
+
+  # Write the peptides to file
+  writeLines(text = peptides, con = normalized_peptides_path)
+  mhcnuggetsr::check_file_exists(normalized_peptides_path)
   ic50 <- mhcnuggetsr::predict_ic50_from_file(
     mhcnuggets_options = mhcnuggets_options,
-    peptides_path = peptides_path
+    peptides_path = peptides_path,
+    mhcnuggets_output_filename = mhcnuggets_output_filename,
+    verbose = verbose
   )
-  file.remove(peptides_path)
+  mhcnuggetsr::check_file_exists(normalized_peptides_path)
+  file.remove(normalized_peptides_path)
+  testthat::expect_false(file.exists(normalized_peptides_path))
   ic50
 }

@@ -1,4 +1,6 @@
 #' Install pip.
+#' @param python_script_filename name of a temporary Python
+#' script file. Will be deleted at the end of the function
 #' @return Nothing
 #' @examples
 #' \dontrun{
@@ -6,17 +8,19 @@
 #' }
 #' @author Richèl J.C. Bilderbeek
 #' @export
-install_pip <- function() {
-  script_filename <- tempfile()
-
-  utils::download.file(
-    url = "https://bootstrap.pypa.io/get-pip.py",
-    destfile = script_filename,
-    quiet = TRUE
+install_pip <- function(
+  python_script_filename = file.path(
+    tmpdir = rappdirs::user_cache_dir(),
+    "temp_install_pip.py"
   )
-  system2(
-    reticulate::py_config()$python,
-    args = c(script_filename, "--user"),
-    stdout = FALSE
+) {
+  stop(
+    "'mhcnuggetsr::install_pip' is deprecated, \n",
+    "as it violated CRAN policy. \n",
+    " \n",
+    "To install pip from R, do: \n",
+    " \n",
+    "remotes::install_github(\"richelbilderbeek/mhcnuggetsrinstall\") \n",
+    "mhcnuggetsrinstall::install_pip() \n"
   )
 }

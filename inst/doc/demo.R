@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -16,72 +16,22 @@ if (is_mhcnuggets_installed()) {
   readLines(peptides_path, warn = FALSE)
 }
 
-## -----------------------------------------------------------------------------
+## ----pick_mhc_1_haplotype-----------------------------------------------------
 if (is_mhcnuggets_installed()) {
   mhc_1_haplotype <- "HLA-A02:01"
   expect_true(mhc_1_haplotype %in% get_trained_mhc_1_haplotypes())
 }
 
-## -----------------------------------------------------------------------------
-if (is_mhcnuggets_installed()) {
-  mhcnuggets_options <- create_mhcnuggets_options(
-    mhc = mhc_1_haplotype
-  )
-  df <- predict_ic50_from_file(
-    peptides_path = peptides_path,
-    mhcnuggets_options = mhcnuggets_options
-  )
-  kable(df)
-}
-
-## -----------------------------------------------------------------------------
-if (is_mhcnuggets_installed()) {
-  mhcnuggets_options <- create_mhcnuggets_options(
-    mhc = mhc_1_haplotype,
-    ba_models = TRUE
-  )
-  df <- predict_ic50_from_file(
-    peptides_path = peptides_path,
-    mhcnuggets_options = mhcnuggets_options
-  )
-  kable(df)
-}
-
-## -----------------------------------------------------------------------------
+## ----pick_mhc_2_haplotype-----------------------------------------------------
 if (is_mhcnuggets_installed()) {
   mhc_2_haplotype <- "HLA-DRB101:01"
   expect_true(mhc_2_haplotype %in% get_trained_mhc_2_haplotypes())
 }
 
-## -----------------------------------------------------------------------------
-if (is_mhcnuggets_installed()) {
-  mhcnuggets_options <- create_mhcnuggets_options(
-    mhc = mhc_2_haplotype
-  )
-  df <- predict_ic50_from_file(
-    peptides_path = peptides_path,
-    mhcnuggets_options = mhcnuggets_options
-  )
-  kable(df)
-}
-
-## -----------------------------------------------------------------------------
+## ----pick_mhc_1_haplotype_supertype-------------------------------------------
 if (is_mhcnuggets_installed()) {
   mhc_1_haplotype <- "HLA-A02:60"
   expect_false(mhc_1_haplotype %in% get_trained_mhc_1_haplotypes())
-}
-
-## -----------------------------------------------------------------------------
-if (is_mhcnuggets_installed()) {
-  mhcnuggets_options <- create_mhcnuggets_options(
-    mhc_class = "I",
-    mhc = mhc_1_haplotype
-  )
-  df <- predict_ic50_from_file(
-    peptides_path = peptides_path,
-    mhcnuggets_options = mhcnuggets_options
-  )
-  kable(df)
 }
 
 ## -----------------------------------------------------------------------------

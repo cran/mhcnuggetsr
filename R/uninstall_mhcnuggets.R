@@ -1,25 +1,19 @@
 #' Uninstall the MHCnuggets Python package.
 #' @inheritParams default_params_doc
+#' @param folder_name deprecated name for 'mhcnuggetsr_folder'
 #' @author Richèl J.C. Bilderbeek
 #' @export
 uninstall_mhcnuggets <- function(
-  folder_name = get_default_mhcnuggets_folder(),
-  mhcnuggets_url = get_mhcnuggets_url()
+  folder_name = "deprecated",
+  mhcnuggets_url = "deprecated"
 ) {
-  mhcnuggetsr::check_mhcnuggets_installation(
-    folder_name = folder_name,
-    mhcnuggets_url = mhcnuggets_url
+  stop(
+    "'mhcnuggetsr::uninstall_mhcnuggets' is deprecated, \n",
+    "as it violated CRAN policy. \n",
+    " \n",
+    "To uninstall MHCnuggets from R, do: \n",
+    " \n",
+    "remotes::install_github(\"richelbilderbeek/mhcnuggetsrinstall\") \n",
+    "mhcnuggetsrinstall::uninstall_mhcnuggets() \n"
   )
-
-  # Uninstall the pip package
-  system2(
-    reticulate::py_config()$python,
-    args = c("-m", "pip", "uninstall", "mhcnuggets", "--yes"),
-    stdout = TRUE
-  )
-
-  # Delete folder
-  mhcnuggets_folder <- file.path(folder_name, basename(mhcnuggets_url))
-  unlink(mhcnuggets_folder, recursive = TRUE, force = TRUE)
-  testthat::expect_true(!dir.exists(mhcnuggets_folder))
 }

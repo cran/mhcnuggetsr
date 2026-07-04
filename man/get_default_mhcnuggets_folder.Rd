@@ -3,17 +3,24 @@
 \name{get_default_mhcnuggets_folder}
 \alias{get_default_mhcnuggets_folder}
 \title{Get the path to the folder where this package installs
-MHCnuggets by default}
+\code{MHCnuggets} by default}
 \usage{
-get_default_mhcnuggets_folder()
+get_default_mhcnuggets_folder(
+  mhcnuggetsr_folder = get_default_mhcnuggetsr_folder()
+)
+}
+\arguments{
+\item{mhcnuggetsr_folder}{folder where \code{mhcnuggetsr} stores its
+temporary files. Use \link{get_default_mhcnuggetsr_folder}
+for its default value.}
 }
 \value{
 the path to the folder where this package installs
-MHCnuggets by default
+`MHCnuggets`` by default
 }
 \description{
 Get the path to the folder where this package installs
-MHCnuggets by default
+\code{MHCnuggets} by default
 }
 \examples{
 get_default_mhcnuggets_folder()
